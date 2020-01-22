@@ -12,11 +12,16 @@
     name: "app",
     data(){
       return{
+        //first kill button hider
         disabled: false,
+
+        //currency amounts and upgrades
         demons: 0,
         fists: 0,
+
+        //costs and multipliers
         fistCost: 1,
-        fistCostMultiplier: 2,
+        fistCostMultiplier: 1.5,
       }
     },
     methods: {
@@ -52,8 +57,9 @@
   }
 </script>
 
-<style scoped>
+<style>
   body{
     text-align: center;
+    background-image: url("https://66.media.tumblr.com/1c5b251b8f2962e87e0b7b0384b6df3d/tumblr_o89aziL6FE1qd4q8ao1_400.gifv");
   }
 </style>

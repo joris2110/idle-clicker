@@ -1,25 +1,5 @@
-# joris_his_paradise
+# Doom Idle Clicker
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-# idle-clicker
+#### Just trying to learn VueJS by making a small incremental game.
+If you want to follow progress thats up to you but dont expect alot from me :) <br>
+<3

@@ -6,7 +6,7 @@ If you want to follow progress thats up to you but dont expect alot from me :) <
 
 
 
-#The idea:
+# The idea:
 Clicker game based on doom. <br>
 Main score/amount/currency is the demons you have killed.<br>
 You buy new weapons to increase your killing speed.<br>

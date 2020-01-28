@@ -1,13 +1,11 @@
 <template>
   <div id="app">
     <h1>Demons Killed: {{demons}}</h1>
-<!--    <h2>Fist level: {{fists}}</h2>-->
-<!--    <h2>Pistol Level: {{pistols}}</h2>-->
 
     <ul v-if="pickedUpWeapons.length > 0">
       <h2>Weapons picked up</h2>
       <li v-for="weapon in pickedUpWeapons" v-bind:key="weapon">
-        <h2>{{weapon.name}} ({{getKillLevel(weapon)}})</h2>
+        <h2>{{weapon.name}} (Level: {{getWeaponLevel(weapon)}})</h2>
         <button v-if="!selectedWeapon || !selectedWeapon.id === weapon.id" v-on:click="selectWeapon(weapon)">select weapon</button>
       </li>
     </ul>
@@ -22,14 +20,13 @@
 
     <div v-if="selectedWeapon">
       <h2>Selected weapon</h2>
-      {{selectedWeapon.name}} ({{getKillLevel(selectedWeapon)}})
+      {{selectedWeapon.name}} (DPS: {{getKillLevel(selectedWeapon)}}) <br>
+      <button v-on:click="upgradeWeapon">Upgrade weapon. ({{this.selectedWeapon.upgradeCost}} demons.).</button>
     </div>
 
     <button v-if="needFirstKill" v-on:click="killFirstDemon">Kill your first demon on accident.</button><br>
+    <button v-if="demons >= 100 || pistolFound" v-on:click="pickUpWeapon('pistol')">Find pistol.</button>
 
-<!--    <button v-on:click="upgradeFists">Upgrade fists ({{fistCost}})</button><br>-->
-<!--    <button v-if="pistolFound" v-on:click="foundPistol">Find a pistol in the corner.</button><br>-->
-<!--    <button v-if="pistolUpgrade" v-on:click="upgradePistol">Upgrade Pistols ({{pistolCost}})</button><br>-->
   </div>
 </template>
 
@@ -41,6 +38,7 @@
         demons: 0,
         //first kill button hider
         needFirstKill: true,
+        pistolFound: true,
         // pistolFound: false,
         // pistolUpgrade: false,
         // demonKillsNeededForPistol : 50,
@@ -52,49 +50,25 @@
                   demonsKilled: 1,
                   killLevel: 1,
                   level: 1,
-                  multiplier: 2
-                },
-                {
-                  id: 'knive',
-                  name: 'Knive',
-                  demonsKilled: 50,
-                  killLevel: 2,
-                  level: 0,
-                  multiplier: 3
+                  multiplier: 2,
+                  upgradeCost: 10,
+                  upgradeMultiplier: 2
                 },
                 {
                   id: 'pistol',
                   name: 'Pistol',
                   demonsKilled: 100,
                   killLevel: 3,
-                  level: 0,
-                  multiplier: 4
-                },
-                {
-                  id: 'shotgun',
-                  name: 'Shotgun',
-                  demonsKilled: 200,
-                  killLevel: 4,
-                  level: 0,
-                  multiplier: 5
+                  level: 1,
+                  multiplier: 4,
+                  upgradeCost: 200,
+                  upgradeMultiplier: 5
                 }
         ],
 
         weaponsFound: [],
         pickedUpWeapons: [],
         selectedWeapon: null,
-
-        //currency amounts and upgrades
-        // fists: 0,
-        // pistols: 0,
-
-        //costs and multipliers
-        //fists
-        // fistCost: 1,
-        // fistCostMultiplier: 2,
-        //pistols
-        // pistolCost: 5,
-        // pistolCostMultiplier: 10,
       }
     },
     methods: {
@@ -105,20 +79,18 @@
         this.selectWeapon(weapon);
         this.start();
       },
-
-      findWeapon: function (name) {
-        for (var i=0; i < this.weapons.length; i++) {
-          var weapon = this.weapons[i];
-          if (name === weapon.id) {
-            this.weaponsFound.push(weapon);
-          }
+      upgradeWeapon: function () {
+        if (this.demons >= this.selectedWeapon.upgradeCost) {
+          this.demons = this.demons - this.selectedWeapon.upgradeCost;
+          this.selectedWeapon.level++;
+          this.selectedWeapon.upgradeCost = this.selectedWeapon.upgradeCost * this.selectedWeapon.upgradeMultiplier;
         }
       },
 
-      pickUpWeapon: function (name) {
+      pickUpWeapon: function (id) {
         for (var i=0; i < this.weapons.length; i++) {
           var weapon = this.weapons[i];
-          if (name === weapon.id) {
+          if (id === weapon.id) {
             this.pickedUpWeapons.push(weapon);
             return weapon;
           }
@@ -130,7 +102,10 @@
       },
 
       getKillLevel: function (weapon) {
-        return weapon.killLevel * (weapon.level * weapon.multiplier);
+        return weapon.killLevel = (weapon.level * weapon.multiplier);
+      },
+      getWeaponLevel: function (weapon) {
+        return weapon.level;
       },
 
       start: function() {
